@@ -1,24 +1,32 @@
 import logo from './logo.svg';
 import './App.css';
+import { styled } from 'styled-components';
+import { Route, Routes, useParams } from 'react-router-dom';
+import ProductAll from './Component/ProductAll';
+import NavBar from './Component/NavBar';
+import Login from './Component/Login';
+import { useEffect, useState } from 'react';
+import PrivateRouter from './Component/PrivateRouter';
 
+const Container = styled.div`
+  height: 100%;
+  overflow-x: hidden;
+`
 function App() {
+  const [authenticate, setAuthenticate] = useState(false);
+  useEffect(() => {
+    console.log("login", authenticate)
+  }, [authenticate]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <NavBar authenticate={authenticate} setAuthenticate={setAuthenticate}/>
+      <Routes>
+        <Route path='/' element={<ProductAll />}/>
+        <Route path='/login' element={<Login setAuthenticate={setAuthenticate} />}/>
+        <Route path='/products/:id' element={<PrivateRouter authenticate={authenticate} />}/>
+      </Routes>
+    </Container>
   );
 }
 
